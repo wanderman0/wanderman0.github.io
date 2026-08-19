@@ -6,7 +6,7 @@
 // (Bibliothèque > YouTube Data API v3 > Identifiants > Créer une clé API,
 // puis restreignez-la à votre domaine et à cette API uniquement)
 const YT_CONFIG = {
-    apiKey: 'AIzaSyADYX3RkLuM9_8k7j3a082DdzSodXADc_M',
+    apiKey: 'AIzaSyBtc4Zjj7scvXGVchpFNmiGuH96myeNVJo',
     handle: '@wanderman_0'
 };
 
