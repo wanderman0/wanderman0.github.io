@@ -1,10 +1,10 @@
 // ============================================================
-// wanderman0 — comportements de la page
+// wanderman0 — page behavior
 // ============================================================
 
-// Clé API YouTube Data v3 — voir console.cloud.google.com
-// (Bibliothèque > YouTube Data API v3 > Identifiants > Créer une clé API,
-// puis restreignez-la à votre domaine et à cette API uniquement)
+// YouTube Data API v3 key — see console.cloud.google.com
+// (Library > YouTube Data API v3 > Credentials > Create API key,
+// then restrict it to your domain and to this API only)
 const YT_CONFIG = {
     apiKey: 'AIzaSyBtc4Zjj7scvXGVchpFNmiGuH96myeNVJo',
     handle: '@wanderman_0'
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initYouTubeSubs();
 });
 
-/* ---------- effet machine à écrire sur la tagline ---------- */
+/* ---------- typewriter effect on the tagline ---------- */
 
 function initTypewriter() {
     const el = document.querySelector('[data-typewriter]');
@@ -44,7 +44,7 @@ function initTypewriter() {
     setTimeout(tick, 400);
 }
 
-/* ---------- copier l'adresse email ---------- */
+/* ---------- copy email address ---------- */
 
 function initCopyEmail() {
     const btn = document.querySelector('[data-copy-email]');
@@ -55,9 +55,9 @@ function initCopyEmail() {
         const email = btn.getAttribute('data-copy-email');
         try {
             await navigator.clipboard.writeText(email);
-            showToast(toast, 'Adresse copiée dans le presse-papiers');
+            showToast(toast, 'Copied to clipboard');
         } catch (err) {
-            showToast(toast, 'Copie impossible — sélectionnez le texte manuellement');
+            showToast(toast, 'Could not copy — please select the text manually');
         }
     });
 }
@@ -70,14 +70,14 @@ function showToast(el, message) {
     el._hideTimer = setTimeout(() => el.classList.remove('show'), 2200);
 }
 
-/* ---------- compteur d'abonnés YouTube (en direct) ---------- */
+/* ---------- live YouTube subscriber count ---------- */
 
 async function initYouTubeSubs() {
     const el = document.getElementById('yt-subs');
     if (!el) return;
 
     if (!YT_CONFIG.apiKey || YT_CONFIG.apiKey === 'VOTRE_CLE_API_ICI') {
-        // Pas de clé configurée : on laisse le texte manuel tel quel.
+        // No key configured yet: leave the manual text as is.
         return;
     }
 
@@ -85,22 +85,22 @@ async function initYouTubeSubs() {
 
     try {
         const res = await fetch(url);
-        if (!res.ok) throw new Error('Réponse API invalide');
+        if (!res.ok) throw new Error('Invalid API response');
 
         const data = await res.json();
         const stats = data.items && data.items[0] && data.items[0].statistics;
 
-        if (!stats) throw new Error('Chaîne introuvable');
+        if (!stats) throw new Error('Channel not found');
 
         if (stats.hiddenSubscriberCount) {
-            el.textContent = 'compteur masqué';
+            el.textContent = 'count hidden';
         } else {
             const count = parseInt(stats.subscriberCount, 10);
-            el.textContent = new Intl.NumberFormat('fr-FR').format(count) + ' abonnés';
+            el.textContent = new Intl.NumberFormat('en-US').format(count) + ' subscribers';
         }
         el.classList.remove('placeholder');
     } catch (err) {
-        // En cas d'échec (quota, clé invalide, hors ligne...) on garde un texte propre.
-        el.textContent = 'indisponible';
+        // On failure (quota, invalid key, offline...) keep a clean fallback.
+        el.textContent = 'unavailable';
     }
 }
